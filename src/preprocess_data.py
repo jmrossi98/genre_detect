@@ -3,7 +3,7 @@ import math
 import json
 import librosa
 
-DATASET_PATH = "archive\\Data\\genres_original" # loaded using the GTZAN Music Genre Classification dataset at https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification
+DATASET_PATH = "data\\archive\\Data\\genres_original" # loaded using the GTZAN Music Genre Classification dataset at https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification
 JSON_PATH = "data\\data.json"
 
 DURATION = 30
@@ -37,7 +37,9 @@ def dump_mfccs_to_json(num_segments=10, n_mfcc=13, n_fft=2048, hop_length=512):
                     if len(mfcc) == expected_mfcc:
                         data["mfcc"].append(mfcc.tolist())
                         data["labels"].append(i-1)
-                        print(f"{file_path}, segment: {s+1}")
 
     with open(JSON_PATH, "w") as fp:
         json.dump(data, fp, indent=4)
+
+if __name__ == "__main__":
+    dump_mfccs_to_json()
