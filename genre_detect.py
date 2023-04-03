@@ -1,3 +1,5 @@
+import os
+import sys
 import librosa
 import argparse
 
@@ -41,8 +43,8 @@ def process_input(audio_file, duration):
 
 class GenreClassifier:
 
-    def __init__(self):
-        pass
+    def __init__(self, file_path):
+        self.file_path = file_path
 
     def train_and_save_model(self):
         x_train, x_validation, x_test, y_train, y_validation, y_test = prepare_datasets(0.3, 0.2)
@@ -63,4 +65,17 @@ if __name__ == "__main__":
         '--path', '-p',
         help="Path to file you'd like to classify"
     )
-    classifier = GenreClassifier()
+    args = parser.parse_args()
+
+    if args.path is not None:
+        path = args.path
+
+        if not os.path.exists(path):
+            print(f"File at {path} does not exist")
+            sys.exit(1)
+        if not os.path.isfile(path):
+            print(f'"{path}" is not a file')
+            sys.exit(1)
+
+        classifier = GenreClassifier(path)
+        
