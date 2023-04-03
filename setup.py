@@ -6,7 +6,9 @@ setup(
     author='Jakob Rossi',
     url='https://github.com/jmrossi98/genre_detect',
     install_requires=[
-        'tensorflow>=2.6.0',
+        'tensorflow==2.9',
+        'keras==2.9',
+        'tensorflow-datasets==4.0.0',
         'tensorflow-estimator>=2.6.0',
         'scikit-learn>=1.0.2',
         'protobuf>=3.20.0',

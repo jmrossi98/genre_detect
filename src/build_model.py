@@ -1,4 +1,6 @@
-import tensorflow.keras as keras
+from keras import Sequential
+from keras.layers import LSTM, Dense, Dropout, Dense
+from keras.optimizers import Adam
 
 def build_model(input_shape):
     """
@@ -6,17 +8,17 @@ def build_model(input_shape):
     """
 
     # build network
-    model = keras.Sequential()
+    model = Sequential()
 
     # add layers
-    model.add(keras.layers.LSTM(64, input_shape=input_shape, return_sequences=True))
-    model.add(keras.layers.LSTM(64))
-    model.add(keras.layers.Dense(64, activation='relu'))
-    model.add(keras.layers.Dropout(0.3))
-    model.add(keras.layers.Dense(10, activation='softmax'))
+    model.add(LSTM(64, input_shape=input_shape, return_sequences=True))
+    model.add(LSTM(64))
+    model.add(Dense(64, activation='relu'))
+    model.add(Dropout(0.3))
+    model.add(Dense(10, activation='softmax'))
 
     # compile network
-    optimizer = keras.optimizers.Adam(learning_rate=0.0001)
+    optimizer = Adam(learning_rate=0.0001)
     model.compile(optimizer=optimizer, loss="sparse_categorical_crossentropy", metrics=['accuracy'])
     model.summary()
 
