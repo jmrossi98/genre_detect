@@ -19,3 +19,6 @@ def prepare_datasets(test_size, validation_size):
     x_train, x_validation, y_train, y_validation = train_test_split(x_train, y_train, test_size=validation_size)
 
     return x_train, x_validation, x_test, y_train, y_validation, y_test
+
+if __name__ == "__main__":
+    x_train, x_validation, x_test, y_train, y_validation, y_test = prepare_datasets(0.3, 0.2)

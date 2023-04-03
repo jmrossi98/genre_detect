@@ -1,6 +1,11 @@
 import matplotlib.pyplot as plt
 
-def plot_history(history):
+from settings import (
+    BATCH_SIZE,
+    EPOCHS
+)
+
+def _plot_history(history):
     """
     Plots accuracy/loss for as a function of epochs
     """
@@ -30,15 +35,16 @@ def train_model(model, x_train, x_validation, x_test, y_train, y_validation, y_t
     Train model with given data splits
     """
 
-    history = model.fit(x_train, y_train, validation_data=(x_validation, y_validation), batch_size=32, epochs=30)
+    history = model.fit(x_train, y_train, validation_data=(x_validation, y_validation), batch_size=BATCH_SIZE, epochs=EPOCHS)
 
     if plot_history:
-        plot_history(history)
+        _plot_history(history)
 
     test_loss, test_acc = model.evaluate(x_test, y_test, verbose=1)
+    print(f"Test accuracy: {test_acc}, test loss: {test_loss}")
 
     if model_name is not None:
         model.save(f"models\\{model_name}")
 
-    return test_acc, test_loss
+    return model
 
