@@ -1,6 +1,7 @@
 import json
 import numpy as np
 from sklearn.model_selection import train_test_split
+from settings import TestSplits
 
 DATASETS_PATH = "data\\data.json"
 
@@ -18,7 +19,7 @@ def prepare_datasets(test_size, validation_size):
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
     x_train, x_validation, y_train, y_validation = train_test_split(x_train, y_train, test_size=validation_size)
 
-    return x_train, x_validation, x_test, y_train, y_validation, y_test
+    return TestSplits(x_train, x_validation, x_test, y_train, y_validation, y_test)
 
 if __name__ == "__main__":
     x_train, x_validation, x_test, y_train, y_validation, y_test = prepare_datasets(0.3, 0.2)

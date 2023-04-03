@@ -9,13 +9,12 @@ from settings import (
     N_FTT,
     HOP_LENGTH,
     NUM_SEGMENTS,
+    DURATION,
 )
 
 DATASET_PATH = "data\\archive\\Data\\genres_original" # loaded using the GTZAN Music Genre Classification dataset at https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification
 JSON_PATH = "data\\data.json"
 
-# All training data is 30s long
-DURATION = 30
 SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
 
 def dump_mfccs_to_json():

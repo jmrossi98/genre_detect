@@ -1,7 +1,9 @@
 import os
 import sys
+import keras
 import librosa
 import argparse
+import numpy as np
 
 from settings import (
     SAMPLE_RATE,
@@ -9,6 +11,8 @@ from settings import (
     N_FTT,
     HOP_LENGTH,
     NUM_SEGMENTS,
+    DURATION,
+    TestSplits,
 )
 
 from src.prepare_dataset import prepare_datasets
@@ -43,20 +47,26 @@ def process_input(audio_file, duration):
 
 class GenreClassifier:
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, load_model=True):
         self.file_path = file_path
+        self.test_splits: TestSplits = prepare_datasets(0.3, 0.2)
+        if load_model is False:
+            input_shape = (self.test_splits.x_train.shape[1], self.test_splits.x_train.shape[2])
+            self.model = build_model(input_shape)
+        else:
+            self.model = keras.models.load_model(f"models\\{MODEL_NAME}")
 
+    # Added as proof for how I trained my model
     def train_and_save_model(self):
-        x_train, x_validation, x_test, y_train, y_validation, y_test = prepare_datasets(0.3, 0.2)
-
-        input_shape = (x_train.shape[1], x_train.shape[2])
-        print(input_shape)
-        model = build_model(input_shape)
-
-        model = train_model(model, x_train, x_validation, x_test, y_train, y_validation, y_test, model_name=MODEL_NAME, plot_history=True)
+        self.model = train_model(self.model, self.test_splits, model_name=MODEL_NAME, plot_history=True)
 
     def predict_with_new_sample(self):
-        pass
+        input_mfcc = process_input(self.file_path, DURATION)
+        input_mfcc = input_mfcc[np.newaxis, ...]
+        prediction = self.model.predict(input_mfcc)
+
+        predicted_index = np.argmax(prediction, axis=1)
+        print("Predicted Genre:", GENRES[int(predicted_index)])
 
 
 if __name__ == "__main__":
@@ -78,4 +88,6 @@ if __name__ == "__main__":
             sys.exit(1)
 
         classifier = GenreClassifier(path)
+        classifier.predict_with_new_sample()
+        sys.exit(0)
         

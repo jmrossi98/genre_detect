@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 
 from settings import (
     BATCH_SIZE,
-    EPOCHS
+    EPOCHS,
+    TestSplits,
 )
 
 def _plot_history(history):
@@ -30,17 +31,26 @@ def _plot_history(history):
 
     plt.show()
 
-def train_model(model, x_train, x_validation, x_test, y_train, y_validation, y_test, model_name=None, plot_history=False):
+def train_model(model, test_splits: TestSplits, model_name=None, plot_history=False):
     """
     Train model with given data splits
     """
 
-    history = model.fit(x_train, y_train, validation_data=(x_validation, y_validation), batch_size=BATCH_SIZE, epochs=EPOCHS)
+    history = model.fit(
+        test_splits.x_train,
+        test_splits.y_train,
+        validation_data=(
+            test_splits.x_validation,
+            test_splits.y_validation
+        ),
+        batch_size=BATCH_SIZE,
+        epochs=EPOCHS
+    )
 
     if plot_history:
         _plot_history(history)
 
-    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=1)
+    test_loss, test_acc = model.evaluate(test_splits.x_test, test_splits.y_test, verbose=1)
     print(f"Test accuracy: {test_acc}, test loss: {test_loss}")
 
     if model_name is not None:
