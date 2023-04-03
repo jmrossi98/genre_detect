@@ -15,7 +15,7 @@ def prepare_datasets(test_size, validation_size):
     X = np.array(data["mfcc"])
     y = np.array(data["labels"])
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
-    X_train, X_validation, y_train, y_validation = train_test_split(X_train, y_train, test_size=validation_size)
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+    x_train, x_validation, y_train, y_validation = train_test_split(x_train, y_train, test_size=validation_size)
 
-    return X_train, X_validation, X_test, y_train, y_validation, y_test
+    return x_train, x_validation, x_test, y_train, y_validation, y_test
