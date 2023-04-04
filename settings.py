@@ -1,6 +1,9 @@
 import numpy as np
 from dataclasses import dataclass
 
+TEST_SIZE = 0.3
+VALIDATION_SIZE = 0.20
+
 SAMPLE_RATE = 22050
 NUM_MFCC = 13
 N_FTT = 2048
