@@ -18,5 +18,5 @@ Example:
 `python genre_detect.py --path C:\Users\jake\Downloads\shook_ones_pt2.mp3`
 
 ## Model
-<img src="/images/model_eval.png" alt="ModelEval" width="400">
+<img src="/images/model_eval.png" alt="ModelEval" width="1200">
 
