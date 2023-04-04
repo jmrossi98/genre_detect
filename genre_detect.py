@@ -69,19 +69,26 @@ class GenreClassifier:
 
 if __name__ == "__main__":
     classifier = GenreClassifier()
-    parser = argparse.ArgumentParser(description='Give a path to an audio file...')
+    print("""
+    ,----.                                ,------.         ,--.              ,--.   
+    '  .-./   ,---.,--,--,,--.--.,---.     |  .-.  \ ,---.,-'  '-.,---. ,---,-'  '-. 
+    |  | .---| .-. |      |  .--| .-. :    |  |  \  | .-. '-.  .-| .-. | .--'-.  .-' 
+    '  '--'  \   --|  ||  |  |  \   --.    |  '--'  \   --. |  | \   --\ `--. |  |   
+    `------' `----`--''--`--'   `----'    `-------' `----' `--'  `----'`---' `--' 
+    """)
+    parser = argparse.ArgumentParser(description="Give a path to a music file and we'll predict the genre", usage=argparse.SUPPRESS)
     parser.add_argument(
-        '--path', '-p',
+        '-p', '--path',
         help="Path to file you'd like to classify"
     )
     parser.add_argument(
-        '--build', '-b',
-        action="store_true",
-        help="Build model"
+        '-n', '--name',
+        help="Name of model in /models folder (only if you built custom model, uses rnn_genre_classifier by default)"
     )
     parser.add_argument(
-        '--name', '-n',
-        help="Name of model in /models folder (only if you built custom model, uses rnn_genre_classifier by default)"
+        '-b', '--build',
+        action="store_true",
+        help="Build model"
     )
     args = parser.parse_args()
     classifier = GenreClassifier(args.name)
@@ -99,4 +106,7 @@ if __name__ == "__main__":
             sys.exit(1)
         classifier.predict_with_new_sample(path)
         sys.exit(0)
+    else:
+        print("Add file using --path (e.g. --path C:\\Users\\xxx\\xxx.wav )")
+        parser.print_help()
         
