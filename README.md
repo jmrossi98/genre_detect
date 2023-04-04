@@ -18,5 +18,6 @@ Example:
 `python genre_detect.py --path C:\Users\jake\Downloads\shook_ones_pt2.mp3`
 
 ## Model
+Saved model at models\rnn_genre_classifier.h5
 <img src="/images/model_eval.png" alt="ModelEval" width="1200">
 
