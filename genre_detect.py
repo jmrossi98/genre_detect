@@ -107,6 +107,5 @@ if __name__ == "__main__":
         classifier.predict_with_new_sample(path)
         sys.exit(0)
     else:
-        print("Add file using --path (e.g. --path C:\\Users\\xxx\\xxx.wav )")
         parser.print_help()
         
