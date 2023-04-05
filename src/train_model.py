@@ -54,7 +54,7 @@ def train_model(model, test_splits: TestSplits, model_name=None, plot_history=Fa
     print(f"Test accuracy: {test_acc}, test loss: {test_loss}")
 
     if model_name is not None:
-        model.save(f"models\\{model_name}")
+        model.save(f"models\\{model_name}", save_format='h5')
 
     return model
 

@@ -22,7 +22,7 @@ from src.prepare_dataset import prepare_datasets
 from src.build_model import build_model
 from src.train_model import train_model
 
-MODEL_NAME = "rnn_genre_classifier.h5"
+MODEL_NAME = "rnn_genre_classifier"
 GENRES = {
     0: "blues",
     1: "classical",
