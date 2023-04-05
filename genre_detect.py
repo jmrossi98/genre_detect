@@ -84,7 +84,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         '--name',
-        help="Name of model in /models folder (only if you built custom model, uses rnn_genre_classifier by default)"
+        help="Name of model in models folder (only if you built custom model, uses rnn_genre_classifier by default)"
     )
     parser.add_argument(
         '--build',
