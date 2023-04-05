@@ -1,8 +1,12 @@
 # Genre Detect
 
+<br />
+
 A tool that predicts the genre of a given audio file using a Long Short-Term Memory Recurrent Neural Network.
 
 This model will classify the audio file into one of 10 categories: Blues, Classical, Country, Disco, Hiphop, Jazz, Metal, Pop, Reggae or Rock.
+
+<br />
 
 ## Installation
 
@@ -12,9 +16,9 @@ Create a local instance by running
 Install all dependencies by running
 `pip install -e .`
 
-## Usage
+<br />
 
-### Required
+## Usage
 
 All you need is to specify the path of an audio file you'd like to classify.
 
@@ -22,11 +26,12 @@ All you need is to specify the path of an audio file you'd like to classify.
 
 > No other arguments will have the tool use the RNN-LSTM model I trained with the GTZAN dataset.
 
-Example:
+Example: <br />
 `python genre_detect.py --path C:\Users\jake\Downloads\shook_ones_pt2.mp3`
 
+<br />
 
-### Optional
+### Optional Arguments
 
 If you want to preprocess new data and/or build a new model you can add these arguments:
 
@@ -34,18 +39,22 @@ If you want to preprocess new data and/or build a new model you can add these ar
 
 > The path to raw data that can be preprocessed for the model to use.
 
-Example:
+Example: <br />
 `python genre_detect.py --preprocess data\archive\Data\genres_original`
 
 #### --build and --name
 
 > Rebuild a model to train and save under specified name in models folder. You can edit the model at src\build_model. Default model will be overwritten if name isn't specified.
 
-Example:
+Example: <br />
 `python genre_detect.py --build --name rnn_genre_classifier_new`
 
+<br />
 
-## Model
+## Accuracy/Error Eval
 Test accuracy plot of the model I trained and saved at models\rnn_genre_classifier.h5
-> <img src="/images/model_eval.png" alt="ModelEval" width="1200">
+
+<br />
+
+<img src="/images/model_eval.png" alt="ModelEval" width="1200">
 
