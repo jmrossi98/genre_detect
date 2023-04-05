@@ -17,6 +17,7 @@ from settings import (
     TestSplits,
 )
 
+from src.preprocess_data import dump_mfccs_to_json
 from src.prepare_dataset import prepare_datasets
 from src.build_model import build_model
 from src.train_model import train_model
@@ -40,6 +41,7 @@ class GenreClassifier:
     def __init__(self, model_name=None):
         self.model_name = model_name if model_name is not None else MODEL_NAME
 
+    # Make sure you run src\preprocess_data.py so we can prepare datasets
     def train_and_save_model(self):
         test_splits: TestSplits = prepare_datasets(TEST_SIZE, VALIDATION_SIZE)
         input_shape = (test_splits.x_train.shape[1],test_splits.x_train.shape[2])
@@ -78,20 +80,28 @@ if __name__ == "__main__":
     """)
     parser = argparse.ArgumentParser(description="Give a path to a music file and we'll predict the genre", usage=argparse.SUPPRESS)
     parser.add_argument(
-        '-p', '--path',
+        '--path',
         help="Path to file you'd like to classify"
     )
     parser.add_argument(
-        '-n', '--name',
+        '--name',
         help="Name of model in /models folder (only if you built custom model, uses rnn_genre_classifier by default)"
     )
     parser.add_argument(
-        '-b', '--build',
+        '--build',
         action="store_true",
-        help="Build model"
+        help="Specify whether to build model"
+    )
+    parser.add_argument(
+        '--preprocess',
+        help="Path to raw data to preprocess for model to use as datasets (looks for unzipped GTZAN dataset in \data by default)",
+        metavar='PATH'
     )
     args = parser.parse_args()
     classifier = GenreClassifier(args.name)
+
+    if args.preprocess:
+        dump_mfccs_to_json(args.preprocess)
 
     if args.build is True:
         classifier.train_and_save_model()

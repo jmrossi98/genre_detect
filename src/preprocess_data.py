@@ -17,10 +17,11 @@ JSON_PATH = "data\\data.json"
 
 SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
 
-def dump_mfccs_to_json():
+def dump_mfccs_to_json(dataset_path=None):
     """
     Processes test data as MFCCs and labels
     """
+    dataset_path = dataset_path if dataset_path is not None else DATASET_PATH
     data = {
         "mapping": [],
         "mfcc": [],
@@ -28,8 +29,8 @@ def dump_mfccs_to_json():
     }
     samples_per_segment = int(SAMPLES_PER_TRACK/NUM_SEGMENTS)
     expected_mfcc = math.ceil(samples_per_segment/HOP_LENGTH)
-    for i, (dirpath, dirnames, filenames) in enumerate(os.walk(DATASET_PATH)):
-        if dirpath is not DATASET_PATH:
+    for i, (dirpath, dirnames, filenames) in enumerate(os.walk(dataset_path)):
+        if dirpath is not dataset_path:
             dirpath_components = dirpath.split("\\")
             label = dirpath_components[-1]
             data["mapping"].append(label)

@@ -132,4 +132,5 @@ dmypy.json
 genre_detect.code-workspace
 /.vscode
 
-/data
+/data/archive
+/data/data.json
