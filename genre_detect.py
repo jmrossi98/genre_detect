@@ -41,7 +41,6 @@ class GenreClassifier:
     def __init__(self, model_name=None):
         self.model_name = model_name if model_name is not None else MODEL_NAME
 
-    # Make sure you run src\preprocess_data.py so we can prepare datasets
     def train_and_save_model(self):
         test_splits: TestSplits = prepare_datasets(TEST_SIZE, VALIDATION_SIZE)
         input_shape = (test_splits.x_train.shape[1],test_splits.x_train.shape[2])
@@ -94,7 +93,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         '--preprocess',
-        help="Path to raw data to preprocess for model to use as datasets (looks for unzipped GTZAN dataset in \data by default)",
+        help="Path to raw data to preprocess for model to use as datasets (looks for unzipped GTZAN dataset in data folder by default)",
         metavar='PATH'
     )
     args = parser.parse_args()
