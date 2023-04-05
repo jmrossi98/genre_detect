@@ -1,6 +1,8 @@
 # Genre Detect
 
-A tool that predicts the genre of a given music file using a Long Short-Term Memory Recurrent Neural Network.
+A tool that predicts the genre of a given audio file using a Long Short-Term Memory Recurrent Neural Network.
+
+This model will classify the audio file into one of 10 categories: Blues, Classical, Country, Disco, Hiphop, Jazz, Metal, Pop, Raggae or Rock.
 
 ## Installation
 
