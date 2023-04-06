@@ -60,7 +60,7 @@ class GenreClassifier:
             return mfcc
 
     def predict_with_new_sample(self, file_path):
-        self.model = keras.models.load_model(f"models\\{self.model_name}")
+        self.model = keras.models.load_model(f"models\\{self.model_name}.h5")
         input_mfcc = self.process_input(file_path, DURATION)
         input_mfcc = input_mfcc[np.newaxis, ...]
         prediction = self.model.predict(input_mfcc)
@@ -93,6 +93,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         '--preprocess',
+        default=None,
         help="Path to raw data to preprocess for model to use as datasets (looks for unzipped GTZAN dataset in data folder by default)",
         metavar='PATH'
     )
