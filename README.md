@@ -35,6 +35,15 @@ Example: <br />
 
 If you want to preprocess new data and/or build a new model you can add these arguments:
 
+#### --name
+
+> Specify the model name you want to predict on.
+
+Example: <br />
+`python genre_detect.py --name rnn_genre_classifier_new --path C:\Users\jake\Downloads\shook_ones_pt2.mp3`
+
+<br />
+
 #### --preprocess
 
 > The path to raw data that can be preprocessed for the model to use.
@@ -42,7 +51,9 @@ If you want to preprocess new data and/or build a new model you can add these ar
 Example: <br />
 `python genre_detect.py --preprocess data\archive\Data\genres_original`
 
-#### --build and --name
+<br />
+
+#### --build
 
 > Rebuild a model to train and save under specified name in models folder. You can edit the model at src\build_model. Default model will be overwritten if name isn't specified.
 
