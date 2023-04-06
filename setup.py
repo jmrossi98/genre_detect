@@ -16,5 +16,6 @@ setup(
         'librosa==0.8.0',
         'matplotlib>=3.7.1',
         'numpy>=1.19.2',
+        'ffmpeg==1.4'
     ]
 )

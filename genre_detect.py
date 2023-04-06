@@ -99,6 +99,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     classifier = GenreClassifier(args.name)
 
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+
     if args.preprocess:
         dump_mfccs_to_json(args.preprocess)
 
@@ -111,10 +115,8 @@ if __name__ == "__main__":
             print(f"File at {path} does not exist")
             sys.exit(1)
         if not os.path.isfile(path):
-            print(f'"{path}" is not a file')
+            print(f'{path} is not a file')
             sys.exit(1)
         classifier.predict_with_new_sample(path)
-        sys.exit(0)
-    else:
-        parser.print_help()
+    sys.exit(0)
         

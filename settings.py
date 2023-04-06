@@ -11,7 +11,7 @@ HOP_LENGTH = 512
 NUM_SEGMENTS = 10
 DURATION = 30
 BATCH_SIZE = 32
-EPOCHS = 50
+EPOCHS = 200
 
 @dataclass
 class TestSplits:
