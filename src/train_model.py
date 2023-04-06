@@ -1,3 +1,4 @@
+from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 
 from settings import (
@@ -35,6 +36,12 @@ def train_model(model, test_splits: TestSplits, model_name=None, plot_history=Fa
     """
     Train model with given data splits
     """
+    model_path = f"models\\{model_name}.h5"
+    checkpoint = ModelCheckpoint(
+        filepath=model_path,
+        save_best_only=True,
+        monitor='val_accuracy',
+    )
 
     history = model.fit(
         test_splits.x_train,
@@ -44,7 +51,8 @@ def train_model(model, test_splits: TestSplits, model_name=None, plot_history=Fa
             test_splits.y_validation
         ),
         batch_size=BATCH_SIZE,
-        epochs=EPOCHS
+        epochs=EPOCHS,
+        callbacks=[checkpoint]
     )
 
     if plot_history:
@@ -53,8 +61,8 @@ def train_model(model, test_splits: TestSplits, model_name=None, plot_history=Fa
     test_loss, test_acc = model.evaluate(test_splits.x_test, test_splits.y_test, verbose=1)
     print(f"Test accuracy: {test_acc}, test loss: {test_loss}")
 
-    if model_name is not None:
-        model.save(f"models\\{model_name}.h5", save_format='h5')
+    # if model_name is not None:
+    #     model.save(f"models\\{model_name}.h5", save_format='h5')
 
     return model
 
