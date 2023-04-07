@@ -7,17 +7,21 @@ def build_model(input_shape):
     Builds model
     """
 
-    # build network
+    # Build network
     model = Sequential()
 
-    # add layers
+    # 2 LSTM layers
     model.add(LSTM(64, input_shape=input_shape, return_sequences=True))
     model.add(LSTM(64))
+
+    # Dense layer
     model.add(Dense(64, activation='relu'))
     model.add(Dropout(0.3))
+
+    # Output layer
     model.add(Dense(10, activation='softmax'))
 
-    # compile network
+    # Compile network
     optimizer = Adam(learning_rate=0.0001)
     model.compile(optimizer=optimizer, loss="sparse_categorical_crossentropy", metrics=['accuracy'])
     model.summary()

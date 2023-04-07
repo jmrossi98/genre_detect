@@ -34,6 +34,8 @@ def dump_mfccs_to_json(dataset_path=None):
             dirpath_components = dirpath.split("\\")
             label = dirpath_components[-1]
             data["mapping"].append(label)
+            print(f"Processing: {label}")
+
             for f in filenames:
                 file_path = os.path.join(dirpath, f)
                 signal, sr = librosa.load(file_path, sr=SAMPLE_RATE)
@@ -46,6 +48,7 @@ def dump_mfccs_to_json(dataset_path=None):
                     if len(mfcc) == expected_mfcc:
                         data["mfcc"].append(mfcc.tolist())
                         data["labels"].append(i-1)
+                        print(f"{file_path}, segment:{s+1}")
 
     with open(JSON_PATH, "w") as fp:
         json.dump(data, fp, indent=4)
