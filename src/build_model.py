@@ -11,7 +11,7 @@ def build_model(input_shape):
     model = Sequential()
 
     # 2 LSTM layers
-    model.add(LSTM(64, input_shape=input_shape, return_sequences=True))
+    model.add(LSTM(128, input_shape=input_shape, return_sequences=True))
     model.add(LSTM(64))
 
     # Dense layer

@@ -4,6 +4,8 @@ import keras
 import librosa
 import argparse
 import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
 
 from settings import (
     TEST_SIZE,
@@ -48,24 +50,34 @@ class GenreClassifier:
         model = train_model(model, test_splits, model_name=self.model_name, plot_history=True)
         return model
 
-    def process_input(self, audio_file, duration):
+    def process_input(self, audio_file, duration, segment):
         SAMPLES_PER_TRACK = SAMPLE_RATE * duration
         samples_per_segment = int(SAMPLES_PER_TRACK / NUM_SEGMENTS)
         signal, sample_rate = librosa.load(audio_file, sr=SAMPLE_RATE)
-        for s in range(NUM_SEGMENTS):
-            start = samples_per_segment * s
-            finish = start + samples_per_segment
-            mfcc = librosa.feature.mfcc(signal[start:finish], sample_rate, n_mfcc=NUM_MFCC, n_fft=N_FTT, hop_length=HOP_LENGTH)
-            mfcc = mfcc.T
-            return mfcc
+        start = samples_per_segment * segment
+        finish = start + samples_per_segment
+        mfcc = librosa.feature.mfcc(signal[start:finish], sample_rate, n_mfcc=NUM_MFCC, n_fft=N_FTT, hop_length=HOP_LENGTH)
+        mfcc = mfcc.T
+        return mfcc
 
     def predict_with_new_sample(self, file_path):
         self.model = keras.models.load_model(f"models\\{self.model_name}.h5")
-        input_mfcc = self.process_input(file_path, DURATION)
-        input_mfcc = input_mfcc[np.newaxis, ...]
-        prediction = self.model.predict(input_mfcc)
-        predicted_index = np.argmax(prediction, axis=1)
-        print("Predicted Genre:", GENRES[int(predicted_index)])
+
+        # Predict all segments
+        predictions = []
+        for s in range(NUM_SEGMENTS):
+            print(f"Processing segment {s+1}/{NUM_SEGMENTS}...")
+            input_mfcc = self.process_input(file_path, DURATION, s)
+            input_mfcc = input_mfcc[np.newaxis, ...]
+            prediction = self.model.predict(input_mfcc)
+            predicted_index = np.argmax(prediction, axis=1)
+            predictions.append(int(predicted_index))
+
+        # Get most common prediction indices
+        predicted_index_overall = max(set(predictions), key=predictions.count)
+        predicted_genre = GENRES[int(predicted_index_overall)]
+        print("\nPredicted Genre:", predicted_genre)
+        return predicted_genre
 
 
 if __name__ == "__main__":
