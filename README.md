@@ -63,7 +63,7 @@ Example: <br />
 <br />
 
 ## Accuracy/Error Eval
-Test accuracy plot of the model I trained and saved at models\rnn_genre_classifier.h5
+Test accuracy plot of the training process to find the default model (models\rnn_genre_classifier.h5). This was selected as the model with the best validation accuracy throughout all epochs.
 
 <br />
 
