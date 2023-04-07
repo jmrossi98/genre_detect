@@ -37,6 +37,7 @@ GENRES = {
     8: "reggae",
     9: "rock"
 }
+NEW_SAMPLES_PATH = "C:\\Users\\JakeR\\Downloads\\predict_data"
 
 class GenreClassifier:
 
@@ -79,6 +80,34 @@ class GenreClassifier:
         print("\nPredicted Genre:", predicted_genre)
         return predicted_genre
 
+    def test_model_new_samples(self):
+        content = ""
+        label_averages = []
+        for i, (dirpath, dirnames, filenames) in enumerate(os.walk(NEW_SAMPLES_PATH)):
+            if dirpath is not NEW_SAMPLES_PATH:
+                dirpath_components = dirpath.split("\\")
+                label = dirpath_components[-1]
+                label_pass = 0
+                label_samples = 0
+                print(f"Testing {label} genre...")
+                for f in filenames:
+                    print(f"Testing {f}...")
+                    file_path = os.path.join(dirpath, f)
+                    pred_label = self.predict_with_new_sample(file_path)
+                    print(f"Expected: {label}, Predicted: {pred_label}")
+                    if label == pred_label:
+                        label_pass += 1
+                    label_samples +=1
+                label_average = label_pass / label_samples
+                print(f"Accuracy for {label}: {label_average}")
+                content += f"{label}: {label_average}\n"
+                label_averages.append(label_average)
+        overall_avg = sum(label_averages) / len(label_averages)
+        print(f"Overall Accuracy: {overall_avg}")
+        content += f"\nOverall: {overall_avg}\n"
+        with open("test_report.txt", "w") as f:
+            f.write(content)
+
 
 if __name__ == "__main__":
     classifier = GenreClassifier()
@@ -112,20 +141,26 @@ if __name__ == "__main__":
     args = parser.parse_args()
     classifier = GenreClassifier(args.name)
 
-    if len(sys.argv) == 1:
-        parser.print_help()
+    classifier.test_model_new_samples()
 
-    if args.preprocess:
-        dump_mfccs_to_json(args.preprocess)
+    # if len(sys.argv) == 1:
+    #     parser.print_help()
+    #     sys.exit(1)
 
-    if args.build is True:
-        classifier.train_and_save_model()
+    # if args.preprocess:
+    #     dump_mfccs_to_json(args.preprocess)
 
-    if args.path is not None:
-        path = args.path
-        if not os.path.exists(path):
-            print(f"File at {path} does not exist")
-        if not os.path.isfile(path):
-            print(f'{path} is not a file')
-        classifier.predict_with_new_sample(path)
+    # if args.build is True:
+    #     classifier.train_and_save_model()
+
+    # if args.path is not None:
+    #     path = args.path
+    #     if not os.path.exists(path):
+    #         print(f"File at {path} does not exist")
+    #         sys.exit(1)
+    #     if not os.path.isfile(path):
+    #         print(f'{path} is not a file')
+    #         sys.exit(1)
+    #     classifier.predict_with_new_sample(path)
+    # sys.exit(0)
         
