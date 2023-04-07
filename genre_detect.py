@@ -114,7 +114,6 @@ if __name__ == "__main__":
 
     if len(sys.argv) == 1:
         parser.print_help()
-        sys.exit(1)
 
     if args.preprocess:
         dump_mfccs_to_json(args.preprocess)
@@ -126,10 +125,7 @@ if __name__ == "__main__":
         path = args.path
         if not os.path.exists(path):
             print(f"File at {path} does not exist")
-            sys.exit(1)
         if not os.path.isfile(path):
             print(f'{path} is not a file')
-            sys.exit(1)
         classifier.predict_with_new_sample(path)
-    sys.exit(0)
         
