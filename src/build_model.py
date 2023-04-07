@@ -15,7 +15,7 @@ def build_model(input_shape):
     model.add(LSTM(64))
     model.add(Dense(64, activation='relu'))
     model.add(Dropout(0.3))
-    model.add(Dense(10, activation='softmax'))
+    model.add(Dense(6, activation='softmax'))
 
     # compile network
     optimizer = Adam(learning_rate=0.0001)
