@@ -1,12 +1,12 @@
-# Genre Detect
-
 <img src="/images/title.png" alt="Title" width="1200">
 
 <br />
 
-A tool that predicts the genre of a given audio file using a Long Short-Term Memory Recurrent Neural Network.
+A music classification tool that uses deep learning to predict the genre of a given audio file.
 
-This model will classify the audio file into one of 10 categories: Blues, Classical, Country, Disco, Hiphop, Jazz, Metal, Pop, Reggae or Rock.
+This model is a Long Short-Term Memory Recurrent Neural Network trained on the [GTZAN Genre Collection Dataset](https://www.kaggle.com/datasets/carlthome/gtzan-genre-collection).
+
+It'll classify the audio file into one of 10 categories: Blues, Classical, Country, Disco, Hiphop, Jazz, Metal, Pop, Reggae or Rock.
 
 <br />
 
