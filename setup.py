@@ -13,9 +13,9 @@ setup(
         'tensorflow-estimator>=2.6.0',
         'scikit-learn>=1.0.2',
         'protobuf>=3.20.0',
-        'librosa==0.8.0',
+        'librosa==0.10.0.post2',
         'matplotlib>=3.7.1',
-        'numpy>=1.19.2',
+        'numpy>=1.23.5',
         'ffmpeg==1.4'
     ]
 )
