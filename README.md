@@ -1,5 +1,7 @@
 # Genre Detect
 
+<img src="/images/title.png" alt="Title" width="1200">
+
 <br />
 
 A tool that predicts the genre of a given audio file using a Long Short-Term Memory Recurrent Neural Network.
