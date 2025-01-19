@@ -40,7 +40,7 @@ GENRES = {
 
 class GenreClassifier:
 
-    def __init__(self, model_name=None):
+    def __init__(self, model_name):
         self.model_name = model_name if model_name is not None else MODEL_NAME
 
     def train_and_save_model(self):
@@ -91,12 +91,13 @@ if __name__ == "__main__":
     """)
     parser = argparse.ArgumentParser(description="Give a path to a music file and we'll predict the genre", usage=argparse.SUPPRESS)
     parser.add_argument(
-        '--path',
+        '--file_path',
         help="Path to file you'd like to classify"
     )
     parser.add_argument(
-        '--name',
-        help="Name of model in models folder (only if you built custom model, uses rnn_genre_classifier by default)"
+        '--model_path',
+        action="store_true",
+        help="Path to custom model, uses my own rnn_genre_classifier by default"
     )
     parser.add_argument(
         '--build',
@@ -110,7 +111,7 @@ if __name__ == "__main__":
         metavar='PATH'
     )
     args = parser.parse_args()
-    classifier = GenreClassifier(args.name)
+    classifier = GenreClassifier(args.model_path)
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -121,11 +122,11 @@ if __name__ == "__main__":
     if args.build is True:
         classifier.train_and_save_model()
 
-    if args.path is not None:
-        path = args.path
-        if not os.path.exists(path):
-            print(f"File at {path} does not exist")
-        if not os.path.isfile(path):
-            print(f'{path} is not a file')
-        classifier.predict_with_new_sample(path)
+    if args.file_path is not None:
+        file_path = args.file_path
+        if not os.path.exists(file_path):
+            print(f"File at {file_path} does not exist")
+        if not os.path.isfile(file_path):
+            print(f'{file_path} is not a file')
+        classifier.predict_with_new_sample(file_path)
         

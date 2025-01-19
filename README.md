@@ -1,73 +1,124 @@
-<img src="/images/title.png" alt="Title" width="1200">
+# **Genre Detection API**
 
-<br />
+This repository provides an API for detecting the genre of an audio file (MP3 format). The API uses a trained machine learning model to classify the genre of music from an uploaded audio file.
 
-A music classification tool that uses deep learning to predict the genre of a given audio file.
+---
 
-This model is a Long Short-Term Memory Recurrent Neural Network trained on the [GTZAN Genre Collection Dataset](https://www.kaggle.com/datasets/carlthome/gtzan-genre-collection).
+## **Usage**
 
-It'll classify the audio file into one of 10 categories: Blues, Classical, Country, Disco, Hiphop, Jazz, Metal, Pop, Reggae or Rock.
+### **Publicly Hosted API**
+You can directly use the publicly hosted API at **https://jakobrossi.com/api/predict**.
 
-<br />
+#### Example with `curl`:
+```bash
+curl -X POST https://jakobrossi.com/api/predict -F "file=@/path/to/audio/file.mp3"
+```
 
-## Installation
+#### Example with Postman:
+1. Open Postman and create a new **POST** request.
+2. Set the URL to: `https://jakobrossi.com/api/predict`.
+3. Go to the **Body** tab and select **form-data**.
+4. Add a key named `file` and upload an audio file.
+5. Click **Send** to receive the predicted genre in the response.
 
-Create a local instance by running
-` git clone https://github.com/jmrossi98/genre_detect.git `
+#### Response Example:
+```json
+{
+    "genre": "hiphop"
+}
+```
 
-Install all dependencies by running
-`pip install -e .`
+---
 
-<br />
+### **Run Locally**
+If you prefer to run the API locally, follow these steps:
 
-## Usage
+#### Prerequisites:
+- Python 3.x
+- `pip` (Python package installer)
 
-All you need is to specify the path of an audio file you'd like to classify.
+#### Steps to Run Locally:
 
-#### --path
+1. Clone the repository and navigate to the project directory:
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
-> No other arguments will have the tool use the RNN-LSTM model I trained with the GTZAN dataset.
+2. Install the required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Example: <br />
-`python genre_detect.py --path C:\Users\jake\Downloads\shook_ones_pt2.mp3`
+3. Start the Flask app:
+   ```bash
+   python app.py
+   ```
 
-<br />
+4. Test the API using `curl`:
+   ```bash
+   curl -X POST http://127.0.0.1:5000/api/predict -F "file=@path_to_audio_file.mp3"
+   ```
 
-### Optional Arguments
+5. You will receive a response like:
+   ```json
+   {
+       "genre": "hiphop"
+   }
+   ```
 
-If you want to preprocess new data and/or build a new model you can add these arguments:
+---
 
-#### --name
+## **Docker Setup**
 
-> Specify the model name you want to predict on.
+You can also run the application in a Docker container for easy deployment.
 
-Example: <br />
-`python genre_detect.py --name rnn_genre_classifier_new --path C:\Users\jake\Downloads\shook_ones_pt2.mp3`
+### **Build Docker Image:**
 
-<br />
+1. Ensure Docker is installed and running on your machine.
+2. Navigate to the project directory where the Dockerfile is located.
+3. Build the Docker image:
+   ```bash
+   docker build -t genre-detect-api .
+   ```
 
-#### --preprocess
+### **Run Docker Container:**
 
-> The path to raw data that can be preprocessed for the model to use.
+After the image is built, run it in a container:
+```bash
+docker run -p 5000:5000 genre-detect-api
+```
 
-Example: <br />
-`python genre_detect.py --preprocess data\archive\Data\genres_original`
+This will expose the API at `http://localhost:5000`.
 
-<br />
+---
 
-#### --build
+## **File Structure**
+```
+/project-root
+    /app.py              # Main Flask application
+    /requirements.txt    # Python dependencies
+    /Dockerfile          # Docker setup file
+    /uploads             # Folder for uploaded audio files
+```
 
-> Rebuild a model to train and save under specified name in models folder. You can edit the model at src\build_model. Default model will be overwritten if name isn't specified.
+---
 
-Example: <br />
-`python genre_detect.py --build --name rnn_genre_classifier_new`
+## **Technologies Used**
 
-<br />
+- **Flask**: Web framework for building the API.
+- **librosa**: Python package for music and audio analysis.
+- **TensorFlow**: Used for genre prediction (machine learning model).
+- **Docker**: Containerization for easy deployment.
 
-## Accuracy/Error Eval
-Test accuracy plot of the training process to find the default model (models\rnn_genre_classifier.h5). This was selected as the model with the best validation accuracy throughout all epochs.
+---
 
-<br />
+## **Contributing**
 
-<img src="/images/model_eval.png" alt="ModelEval" width="1200">
+If you would like to contribute to this project, feel free to fork the repository and submit a pull request with your changes. All contributions are welcome!
 
+---
+
+## **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
