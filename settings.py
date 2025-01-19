@@ -13,6 +13,19 @@ DURATION = 30
 BATCH_SIZE = 32
 EPOCHS = 200
 
+GENRES = {
+    0: "blues",
+    1: "classical",
+    2: "country",
+    3: "disco",
+    4: "hiphop",
+    5: "jazz",
+    6: "metal",
+    7: "pop",
+    8: "reggae",
+    9: "rock"
+}
+
 @dataclass
 class TestSplits:
     x_train: np.array
