@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genre Detect API</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #0f1117;
+    --panel: #171a23;
+    --border: #2a2e3a;
+    --text: #e8e9ed;
+    --muted: #9498a3;
+    --accent: #7c9eff;
+    --accent-strong: #5c7cfa;
+    --good: #4ade80;
+    --bad: #f87171;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f5f6f8;
+      --panel: #ffffff;
+      --border: #e1e3e8;
+      --text: #1a1d24;
+      --muted: #666b78;
+      --accent: #3b5bdb;
+      --accent-strong: #364fc7;
+      --good: #2b8a3e;
+      --bad: #c92a2a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px;
+  }
+  .card {
+    width: 100%;
+    max-width: 560px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  h1 {
+    font-size: 1.4rem;
+    margin: 0 0 4px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+  .subtitle code {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 0.85em;
+  }
+  .genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .genres span {
+    font-size: 0.75rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    text-transform: capitalize;
+  }
+  #dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  #dropzone:hover, #dropzone.dragover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+  #dropzone p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  #dropzone .filename {
+    color: var(--text);
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  #file-input { display: none; }
+  button {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent-strong);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  #result {
+    margin-top: 20px;
+    min-height: 1.2em;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #result .genre {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: capitalize;
+  }
+  #result.error .genre { color: var(--bad); }
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .note {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+  .note a { color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Genre Detect API</h1>
+    <p class="subtitle">
+      Upload an MP3 and a trained CNN/RNN model will classify its genre.
+      Same model behind <code>POST /api/predict</code>.
+    </p>
+    <div class="genres">
+      {% for genre in genres %}<span>{{ genre }}</span>{% endfor %}
+    </div>
+
+    <div id="dropzone">
+      <p>Drag an MP3 here, or click to choose a file</p>
+      <div class="filename" id="filename"></div>
+    </div>
+    <input type="file" id="file-input" accept="audio/mpeg,.mp3">
+
+    <button id="submit-btn" disabled>Predict genre</button>
+
+    <div id="result"></div>
+
+    <p class="note">
+      Hosted on a free Hugging Face Space CPU tier — if this is the first
+      request in a while, the container may need up to a minute to wake up.
+    </p>
+  </div>
+
+<script>
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const filenameEl = document.getElementById('filename');
+  const submitBtn = document.getElementById('submit-btn');
+  const resultEl = document.getElementById('result');
+  let selectedFile = null;
+
+  function setFile(file) {
+    if (!file) return;
+    selectedFile = file;
+    filenameEl.textContent = file.name;
+    submitBtn.disabled = false;
+    resultEl.className = '';
+    resultEl.innerHTML = '';
+  }
+
+  dropzone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', (e) => setFile(e.target.files[0]));
+
+  ['dragover', 'dragenter'].forEach(evt =>
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    })
+  );
+  ['dragleave', 'drop'].forEach(evt =>
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+    })
+  );
+  dropzone.addEventListener('drop', (e) => setFile(e.dataTransfer.files[0]));
+
+  submitBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+    submitBtn.disabled = true;
+    resultEl.className = '';
+    resultEl.innerHTML = '<div class="spinner"></div><span>Analyzing (this can take a minute on a cold start)&hellip;</span>';
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+      const res = await fetch('/api/predict', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+      resultEl.innerHTML = `Predicted genre: <span class="genre">${data.genre}</span>`;
+    } catch (err) {
+      resultEl.className = 'error';
+      resultEl.innerHTML = `<span class="genre">Error</span> <span>${err.message}</span>`;
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

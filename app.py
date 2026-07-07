@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import numpy as np
 import keras
 from keras.models import load_model
@@ -83,6 +83,11 @@ def predict_genre(file):
     predicted_genre = GENRES[int(predicted_index_overall)]
     return predicted_genre
 
+
+# Serve the landing page / demo UI
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html', genres=sorted(GENRES.values()))
 
 # Define an endpoint to make predictions
 @app.route('/api/predict', methods=['POST'])
