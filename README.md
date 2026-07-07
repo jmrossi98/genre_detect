@@ -1,3 +1,13 @@
+---
+title: Genre Detect API
+emoji: 🎵
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 5000
+pinned: false
+---
+
 # **Genre Detect API**
 
 This repository provides an API for detecting the genre of an audio file (MP3 format). The API uses a trained machine learning model to classify the genre of music from an uploaded audio file.
